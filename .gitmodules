@@ -1,0 +1,4 @@
+[submodule "vendor/libfx"]
+	path = vendor/libfx
+	url = git@github.com:holepunchto/libfx.git
+	shallow = true
