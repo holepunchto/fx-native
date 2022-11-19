@@ -2,4 +2,8 @@ const { App } = require('..')
 
 const app = App.shared()
 
-app.send(Buffer.from('hello world'))
+app
+  .on('message', (message) => {
+    app.broadcast(message)
+  })
+  .broadcast('from background')

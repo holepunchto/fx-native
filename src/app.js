@@ -2,7 +2,7 @@ const binding = require('../binding')
 const b4a = require('b4a')
 const EventEmitter = require('events')
 
-function ondelivered () {
+function ondispatch () {
   this.resolve()
 }
 
@@ -16,10 +16,12 @@ module.exports = class App extends EventEmitter {
 
     binding.fx_napi_init(this._handle, this,
       this._onlaunch,
+      this._onterminate,
       this._onmessage
     )
 
     this.isMain = binding.fx_napi_is_main(this._handle) !== 0
+    this.isWorker = !this.isMain
   }
 
   static _instance = null
@@ -30,7 +32,13 @@ module.exports = class App extends EventEmitter {
   }
 
   _onlaunch () {
+    this.running = true
     this.emit('launch')
+  }
+
+  _onterminate () {
+    this.running = false
+    this.emit('terminate')
   }
 
   _onmessage (message) {
@@ -40,45 +48,30 @@ module.exports = class App extends EventEmitter {
   run () {
     if (!this.isMain) throw new Error('run() can only be called on main thread')
 
-    if (this.running) return
-    this.running = true
-
     binding.fx_napi_run(this._handle)
-  }
-
-  stop () {
-    if (!this.isMain) throw new Error('stop() can only be called on main thread')
-
-    this.running = false
-
-    binding.fx_napi_stop(this._handle)
   }
 
   terminate () {
     if (!this.isMain) throw new Error('terminate() can only be called on main thread')
 
-    this.running = false
-
     binding.fx_napi_terminate(this._handle)
   }
 
-  async send (message) {
-    if (this.isMain) throw new Error('send() cannot be called on main thread')
+  dispatch (cb) {
+    if (!this.isMain) throw new Error('dispatch() can only be called on main thread')
 
-    if (typeof message === 'string') message = b4a.from(message)
-
-    const req = b4a.allocUnsafe(binding.sizeof_fx_napi_send_t)
+    const req = b4a.allocUnsafe(binding.sizeof_fx_napi_dispatch_t)
     const ctx = {
       req,
-      resolve: null
+      resolve: cb
     }
 
-    const promise = new Promise((resolve) => {
-      ctx.resolve = resolve
-    })
+    binding.fx_napi_dispatch(req, ctx, ondispatch)
+  }
 
-    binding.fx_napi_send(this._handle, req, message, ctx, ondelivered)
+  broadcast (message) {
+    if (typeof message === 'string') message = b4a.from(message)
 
-    return promise
+    binding.fx_napi_broadcast(this._handle, message)
   }
 }

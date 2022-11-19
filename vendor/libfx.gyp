@@ -2,7 +2,10 @@
   'targets': [{
     'target_name': 'libfx',
     'type': 'static_library',
-    'sources': [],
+    'sources': [
+      './libfx/src/shared/channel.c',
+      './libfx/src/shared/fx.c',
+    ],
     'configurations': {
       'Debug': {
         'defines': ['DEBUG'],

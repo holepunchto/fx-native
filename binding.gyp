@@ -25,7 +25,8 @@
           '-framework Foundation',
           '-framework AppKit',
           '-framework AVFoundation',
-          '-framework AVKit'
+          '-framework AVKit',
+          '-framework WebKit'
         ],
       }],
     ],
