@@ -1,16 +1,12 @@
 const b4a = require('b4a')
-const EventEmitter = require('events')
 const binding = require('../binding')
 
-const App = require('./app')
+const Node = require('./node')
 
-module.exports = class Window extends EventEmitter {
+module.exports = class Window extends Node {
   constructor (x, y, width, height) {
-    const app = App.shared()
-
     super()
 
-    this.app = app
     this.x = x
     this.y = y
     this.width = width
@@ -19,7 +15,7 @@ module.exports = class Window extends EventEmitter {
 
     this._handle = b4a.allocUnsafe(binding.sizeof_fx_napi_window_t)
 
-    binding.fx_napi_window_init(app._handle, this._handle, x, y, width, height, this,
+    binding.fx_napi_window_init(this.app._handle, this._handle, x, y, width, height, this,
       this._onresize,
       this._onmove,
       this._onclose

@@ -10,6 +10,7 @@
 #include "shared.h"
 
 typedef struct {
+  fx_view_t *view;
   fx_window_t *window;
 
   napi_env env;
@@ -89,7 +90,9 @@ NAPI_METHOD(fx_napi_window_init) {
   napi_create_reference(env, argv[8], 1, &window->on_move);
   napi_create_reference(env, argv[9], 1, &window->on_close);
 
-  fx_window_init(app->app, NULL, x, y, width, height, &window->window);
+  fx_view_init(app->app, x, y, width, height, &window->view);
+
+  fx_window_init(app->app, window->view, x, y, width, height, &window->window);
 
   fx_set_window_data(window->window, (void *) window);
 

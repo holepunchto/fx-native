@@ -1,12 +1,15 @@
 #include <napi-macros.h>
 
 #include "src/app.h"
+#include "src/node.h"
+#include "src/text.h"
 #include "src/window.h"
 
 NAPI_INIT() {
   NAPI_EXPORT_SIZEOF(fx_napi_t)
   NAPI_EXPORT_SIZEOF(fx_napi_dispatch_t)
   NAPI_EXPORT_SIZEOF(fx_napi_window_t)
+  NAPI_EXPORT_SIZEOF(fx_napi_text_t)
 
   NAPI_EXPORT_FUNCTION(fx_napi_init)
   NAPI_EXPORT_FUNCTION(fx_napi_run)
@@ -15,5 +18,10 @@ NAPI_INIT() {
   NAPI_EXPORT_FUNCTION(fx_napi_dispatch)
   NAPI_EXPORT_FUNCTION(fx_napi_broadcast)
 
+  NAPI_EXPORT_FUNCTION(fx_napi_set_child)
+  NAPI_EXPORT_FUNCTION(fx_napi_unset_child)
+
   NAPI_EXPORT_FUNCTION(fx_napi_window_init)
+
+  NAPI_EXPORT_FUNCTION(fx_napi_text_init)
 }
