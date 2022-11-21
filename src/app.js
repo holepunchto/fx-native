@@ -1,6 +1,6 @@
-const binding = require('../binding')
 const b4a = require('b4a')
 const EventEmitter = require('events')
+const binding = require('../binding')
 
 function ondispatch () {
   this.resolve()
@@ -46,20 +46,14 @@ module.exports = class App extends EventEmitter {
   }
 
   run () {
-    if (!this.isMain) throw new Error('run() can only be called on main thread')
-
-    binding.fx_napi_run(this._handle)
+    if (this.isMain) binding.fx_napi_run(this._handle)
   }
 
   terminate () {
-    if (!this.isMain) throw new Error('terminate() can only be called on main thread')
-
     binding.fx_napi_terminate(this._handle)
   }
 
   dispatch (cb) {
-    if (!this.isMain) throw new Error('dispatch() can only be called on main thread')
-
     const req = b4a.allocUnsafe(binding.sizeof_fx_napi_dispatch_t)
     const ctx = {
       req,

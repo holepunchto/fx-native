@@ -1,14 +1,12 @@
-const binding = require('../binding')
 const b4a = require('b4a')
 const EventEmitter = require('events')
+const binding = require('../binding')
 
 const App = require('./app')
 
 module.exports = class Window extends EventEmitter {
   constructor (x, y, width, height) {
     const app = App.shared()
-
-    if (!app.isMain) throw new Error('new Window() can only be called on main thread')
 
     super()
 
