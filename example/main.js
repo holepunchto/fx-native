@@ -1,5 +1,5 @@
 const { Worker } = require('worker_threads')
-const { App, Window } = require('..')
+const { App, Window, WebView } = require('..')
 
 const app = App.shared()
 
@@ -17,6 +17,21 @@ window
 
     app.terminate()
   })
+
+const webview = new WebView(0, 0, 500, 500)
+
+webview
+  .on('message', (message) => {
+    console.log(message)
+  })
+  .loadHTML(`
+    <p>Hello world!<p>
+    <script>
+    bridge.postMessage({ from:'WebView' })
+    </script>
+  `)
+
+window.appendChild(webview)
 
 app
   .on('launch', () => new Worker(require.resolve('./background')))

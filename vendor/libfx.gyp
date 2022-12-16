@@ -25,6 +25,7 @@
           './libfx/src/darwin/appkit/text-input.m',
           './libfx/src/darwin/appkit/video.m',
           './libfx/src/darwin/appkit/view.m',
+          './libfx/src/darwin/appkit/web-view.m',
           './libfx/src/darwin/appkit/window.m',
         ],
       }],
