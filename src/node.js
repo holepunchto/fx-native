@@ -26,6 +26,8 @@ module.exports = class Node extends EventEmitter {
     child.parent = this
 
     this.children.push(child)
+
+    return this
   }
 
   removeChild (child) {
@@ -39,5 +41,7 @@ module.exports = class Node extends EventEmitter {
     child.parent = null
 
     this.children[index] = null
+
+    return this
   }
 }
