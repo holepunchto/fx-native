@@ -3,6 +3,7 @@
 #include "src/app.h"
 #include "src/node.h"
 #include "src/text.h"
+#include "src/view.h"
 #include "src/web-view.h"
 #include "src/window.h"
 
@@ -10,6 +11,7 @@ NAPI_INIT() {
   NAPI_EXPORT_SIZEOF(fx_napi_t)
   NAPI_EXPORT_SIZEOF(fx_napi_dispatch_t)
   NAPI_EXPORT_SIZEOF(fx_napi_window_t)
+  NAPI_EXPORT_SIZEOF(fx_napi_view_t)
   NAPI_EXPORT_SIZEOF(fx_napi_text_t)
   NAPI_EXPORT_SIZEOF(fx_napi_web_view_t)
 
@@ -25,6 +27,8 @@ NAPI_INIT() {
   NAPI_EXPORT_FUNCTION(fx_napi_unset_child)
 
   NAPI_EXPORT_FUNCTION(fx_napi_window_init)
+
+  NAPI_EXPORT_FUNCTION(fx_napi_view_init)
 
   NAPI_EXPORT_FUNCTION(fx_napi_text_init)
 
