@@ -22,6 +22,8 @@ module.exports = class App extends EventEmitter {
 
     this.isMain = binding.fx_napi_is_main(this._handle) !== 0
     this.isWorker = !this.isMain
+
+    process.once('exit', this._onexit.bind(this))
   }
 
   static _instance = null
@@ -29,6 +31,10 @@ module.exports = class App extends EventEmitter {
   static shared () {
     if (this._instance === null) this._instance = new App()
     return this._instance
+  }
+
+  _onexit () {
+    binding.fx_napi_destroy(this._handle)
   }
 
   _onlaunch () {

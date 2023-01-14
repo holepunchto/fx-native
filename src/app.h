@@ -95,6 +95,20 @@ NAPI_METHOD(fx_napi_init) {
   return NULL;
 }
 
+NAPI_METHOD(fx_napi_destroy) {
+  NAPI_ARGV(1)
+  NAPI_ARGV_BUFFER_CAST(fx_napi_t *, app, 0)
+
+  fx_destroy(app->app);
+
+  napi_delete_reference(env, app->on_launch);
+  napi_delete_reference(env, app->on_terminate);
+  napi_delete_reference(env, app->on_message);
+  napi_delete_reference(env, app->ctx);
+
+  return NULL;
+}
+
 NAPI_METHOD(fx_napi_run) {
   NAPI_ARGV(1)
   NAPI_ARGV_BUFFER_CAST(fx_napi_t *, app, 0)
