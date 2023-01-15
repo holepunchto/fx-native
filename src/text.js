@@ -4,7 +4,7 @@ const binding = require('../binding')
 const Node = require('./node')
 
 module.exports = class Text extends Node {
-  constructor (value, x, y, width, height) {
+  constructor (value = '', x = 0, y = 0, width = 0, height = 0) {
     super()
 
     this.value = value

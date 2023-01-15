@@ -4,7 +4,7 @@ const binding = require('../binding')
 const Node = require('./node')
 
 module.exports = class WebView extends Node {
-  constructor (x, y, width, height) {
+  constructor (x = 0, y = 0, width = 0, height = 0) {
     super()
 
     this.x = x
