@@ -22,6 +22,10 @@ module.exports = class Window extends Node {
     )
   }
 
+  _ondestroy () {
+    binding.fx_napi_window_destroy(this._handle)
+  }
+
   _onresize (width, height) {
     this.width = width
     this.height = height

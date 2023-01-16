@@ -36,6 +36,17 @@ NAPI_METHOD(fx_napi_view_init) {
   return NULL;
 }
 
+NAPI_METHOD(fx_napi_view_destroy) {
+  NAPI_ARGV(1)
+  NAPI_ARGV_BUFFER_CAST(fx_napi_view_t *, view, 0)
+
+  fx_view_destroy(view->view);
+
+  napi_delete_reference(env, view->ctx);
+
+  return NULL;
+}
+
 NAPI_METHOD(fx_napi_set_view_bounds) {
   NAPI_ARGV(5)
   NAPI_ARGV_BUFFER_CAST(fx_napi_view_t *, view, 0)

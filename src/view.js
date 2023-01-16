@@ -17,6 +17,10 @@ module.exports = class View extends Node {
     binding.fx_napi_view_init(this.app._handle, this._handle, x, y, width, height, this)
   }
 
+  _ondestroy () {
+    binding.fx_napi_view_destroy(this._handle)
+  }
+
   setBounds (x, y, width, height) {
     this.x = x
     this.y = y

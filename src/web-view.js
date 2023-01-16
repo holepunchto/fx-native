@@ -19,6 +19,10 @@ module.exports = class WebView extends Node {
     )
   }
 
+  _ondestroy () {
+    binding.fx_napi_web_view_destroy(this._handle)
+  }
+
   _onmessage (message) {
     this.emit('message', JSON.parse(message))
   }

@@ -103,4 +103,18 @@ NAPI_METHOD(fx_napi_window_init) {
   return NULL;
 }
 
+NAPI_METHOD(fx_napi_window_destroy) {
+  NAPI_ARGV(1)
+  NAPI_ARGV_BUFFER_CAST(fx_napi_window_t *, window, 0)
+
+  fx_window_destroy(window->window);
+
+  napi_delete_reference(env, window->on_resize);
+  napi_delete_reference(env, window->on_move);
+  napi_delete_reference(env, window->on_close);
+  napi_delete_reference(env, window->ctx);
+
+  return NULL;
+}
+
 #endif // FX_NATIVE_WINDOW_H

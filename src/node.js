@@ -12,8 +12,14 @@ module.exports = class Node extends EventEmitter {
     this.app = app
     this.parent = null
     this.index = -1
+    this.attached = false
+    this.destroyed = false
     this.children = []
+
+    this.once('destroy', this._ondestroy.bind(this))
   }
+
+  _ondestroy () {}
 
   appendChild (child) {
     if (child.parent) return
@@ -43,5 +49,23 @@ module.exports = class Node extends EventEmitter {
     this.children[index] = null
 
     return this
+  }
+
+  destroy () {
+    if (this.destroyed) return
+    this.destroyed = true
+
+    for (const child of this.children) {
+      if (child === null) continue
+
+      child.index = -1
+      child.parent = null
+      child.destroy()
+    }
+
+    this.attached = false
+    this.children = []
+
+    this.emit('destroy')
   }
 }

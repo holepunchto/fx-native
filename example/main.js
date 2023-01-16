@@ -37,6 +37,7 @@ app
   .on('launch', () => new Worker(require.resolve('./background')))
   .on('terminate', () => {
     console.log('terminate')
+    window.destroy()
   })
   .once('message', (message) => {
     console.log(message.toString())

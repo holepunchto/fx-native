@@ -58,6 +58,18 @@ NAPI_METHOD(fx_napi_web_view_init) {
   return NULL;
 }
 
+NAPI_METHOD(fx_napi_web_view_destroy) {
+  NAPI_ARGV(1)
+  NAPI_ARGV_BUFFER_CAST(fx_napi_web_view_t *, web_view, 0)
+
+  fx_web_view_destroy(web_view->web_view);
+
+  napi_delete_reference(env, web_view->on_message);
+  napi_delete_reference(env, web_view->ctx);
+
+  return NULL;
+}
+
 NAPI_METHOD(fx_napi_set_web_view_bounds) {
   NAPI_ARGV(5)
   NAPI_ARGV_BUFFER_CAST(fx_napi_web_view_t *, web_view, 0)

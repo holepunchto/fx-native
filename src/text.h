@@ -40,6 +40,17 @@ NAPI_METHOD(fx_napi_text_init) {
   return NULL;
 }
 
+NAPI_METHOD(fx_napi_text_destroy) {
+  NAPI_ARGV(1)
+  NAPI_ARGV_BUFFER_CAST(fx_napi_text_t *, text, 0)
+
+  fx_text_destroy(text->text);
+
+  napi_delete_reference(env, text->ctx);
+
+  return NULL;
+}
+
 NAPI_METHOD(fx_napi_set_text_bounds) {
   NAPI_ARGV(5)
   NAPI_ARGV_BUFFER_CAST(fx_napi_text_t *, text, 0)
