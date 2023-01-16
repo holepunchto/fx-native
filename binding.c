@@ -13,6 +13,7 @@ NAPI_INIT() {
   NAPI_EXPORT_SIZEOF(fx_napi_window_t)
   NAPI_EXPORT_SIZEOF(fx_napi_view_t)
   NAPI_EXPORT_SIZEOF(fx_napi_text_t)
+  NAPI_EXPORT_SIZEOF(fx_napi_text_span_t)
   NAPI_EXPORT_SIZEOF(fx_napi_web_view_t)
 
   NAPI_EXPORT_FUNCTION(fx_napi_init)
@@ -31,6 +32,7 @@ NAPI_INIT() {
   NAPI_EXPORT_FUNCTION(fx_napi_view_init)
 
   NAPI_EXPORT_FUNCTION(fx_napi_text_init)
+  NAPI_EXPORT_FUNCTION(fx_napi_append_text_span)
 
   NAPI_EXPORT_FUNCTION(fx_napi_web_view_init)
   NAPI_EXPORT_FUNCTION(fx_napi_web_view_post_message)
