@@ -30,11 +30,14 @@ NAPI_INIT() {
   NAPI_EXPORT_FUNCTION(fx_napi_window_init)
 
   NAPI_EXPORT_FUNCTION(fx_napi_view_init)
+  NAPI_EXPORT_FUNCTION(fx_napi_set_view_bounds)
 
   NAPI_EXPORT_FUNCTION(fx_napi_text_init)
+  NAPI_EXPORT_FUNCTION(fx_napi_set_text_bounds)
   NAPI_EXPORT_FUNCTION(fx_napi_append_text_span)
 
   NAPI_EXPORT_FUNCTION(fx_napi_web_view_init)
+  NAPI_EXPORT_FUNCTION(fx_napi_set_web_view_bounds)
   NAPI_EXPORT_FUNCTION(fx_napi_web_view_post_message)
   NAPI_EXPORT_FUNCTION(fx_napi_web_view_load_url)
   NAPI_EXPORT_FUNCTION(fx_napi_web_view_load_html)

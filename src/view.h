@@ -36,4 +36,17 @@ NAPI_METHOD(fx_napi_view_init) {
   return NULL;
 }
 
+NAPI_METHOD(fx_napi_set_view_bounds) {
+  NAPI_ARGV(5)
+  NAPI_ARGV_BUFFER_CAST(fx_napi_view_t *, view, 0)
+  NAPI_ARGV_UINT32(x, 1)
+  NAPI_ARGV_UINT32(y, 2)
+  NAPI_ARGV_UINT32(width, 3)
+  NAPI_ARGV_UINT32(height, 4)
+
+  fx_set_view_bounds(view->view, x, y, width, height);
+
+  return NULL;
+}
+
 #endif // FX_NATIVE_VIEW_H

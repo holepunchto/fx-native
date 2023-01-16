@@ -23,6 +23,15 @@ module.exports = class WebView extends Node {
     this.emit('message', JSON.parse(message))
   }
 
+  setBounds (x, y, width, height) {
+    this.x = x
+    this.y = y
+    this.width = width
+    this.height = height
+
+    binding.fx_napi_set_web_view_bounds(this._handle, x, y, width, height)
+  }
+
   postMessage (message) {
     binding.fx_napi_web_view_post_message(this._handle, JSON.stringify(message))
   }
