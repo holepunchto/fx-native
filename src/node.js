@@ -21,6 +21,24 @@ module.exports = class Node extends EventEmitter {
 
   _ondestroy () {}
 
+  _onattach () {
+    this.attached = true
+    this.emit('attach')
+
+    for (const child of this.children) {
+      if (child !== null) child._onattach()
+    }
+  }
+
+  _ondetach () {
+    this.attached = false
+    this.emit('detach')
+
+    for (const child of this.children) {
+      if (child !== null) child._ondetach()
+    }
+  }
+
   appendChild (child) {
     if (child.parent) return
 
@@ -32,6 +50,8 @@ module.exports = class Node extends EventEmitter {
     child.parent = this
 
     this.children.push(child)
+
+    if (this.attached) child._onattach()
 
     return this
   }
@@ -48,6 +68,8 @@ module.exports = class Node extends EventEmitter {
 
     this.children[index] = null
 
+    if (this.attached) child._ondetach()
+
     return this
   }
 
@@ -60,7 +82,6 @@ module.exports = class Node extends EventEmitter {
     }
 
     this.attached = false
-
     this.emit('destroy')
   }
 }

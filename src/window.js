@@ -11,6 +11,7 @@ module.exports = class Window extends Node {
     this.y = y
     this.width = width
     this.height = height
+    this.attached = true
     this.closed = false
 
     this._handle = b4a.allocUnsafe(binding.sizeof_fx_napi_window_t)
