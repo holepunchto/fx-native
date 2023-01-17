@@ -11,7 +11,7 @@ module.exports = class Window extends Node {
     this.y = y
     this.width = width
     this.height = height
-    this.attached = true
+    this.visible = false
     this.closed = false
 
     this._handle = b4a.allocUnsafe(binding.sizeof_fx_napi_window_t)
@@ -46,5 +46,23 @@ module.exports = class Window extends Node {
 
     this.closed = true
     this.emit('close')
+  }
+
+  show () {
+    if (this.visible) return
+    this.visible = true
+
+    binding.fx_napi_show_window(this._handle)
+
+    this._onattach()
+  }
+
+  hide () {
+    if (!this.visible) return
+    this.visible = false
+
+    binding.fx_napi_hide_window(this._handle)
+
+    this._ondetach()
   }
 }

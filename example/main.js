@@ -31,7 +31,9 @@ webview
     </script>
   `)
 
-window.appendChild(webview)
+window
+  .appendChild(webview)
+  .show()
 
 app
   .on('launch', () => new Worker(require.resolve('./background')))
