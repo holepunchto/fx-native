@@ -56,15 +56,10 @@ module.exports = class Node extends EventEmitter {
     this.destroyed = true
 
     for (const child of this.children) {
-      if (child === null) continue
-
-      child.index = -1
-      child.parent = null
-      child.destroy()
+      if (child !== null) child.destroy()
     }
 
     this.attached = false
-    this.children = []
 
     this.emit('destroy')
   }
