@@ -21,6 +21,7 @@
           './libfx/src/darwin/appkit/image.m',
           './libfx/src/darwin/appkit/node.m',
           './libfx/src/darwin/appkit/screen.m',
+          './libfx/src/darwin/appkit/scroll-view.m',
           './libfx/src/darwin/appkit/text.m',
           './libfx/src/darwin/appkit/text-input.m',
           './libfx/src/darwin/appkit/video.m',

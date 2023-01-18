@@ -36,18 +36,20 @@ on_web_view_message (fx_web_view_t *fx_web_view, const char *message) {
 }
 
 NAPI_METHOD(fx_napi_web_view_init) {
-  NAPI_ARGV(8)
+  NAPI_ARGV(5)
   NAPI_ARGV_BUFFER_CAST(fx_napi_t *, app, 0)
   NAPI_ARGV_BUFFER_CAST(fx_napi_web_view_t *, web_view, 1)
-  NAPI_ARGV_UINT32(x, 2)
-  NAPI_ARGV_UINT32(y, 3)
-  NAPI_ARGV_UINT32(width, 4)
-  NAPI_ARGV_UINT32(height, 5)
+  NAPI_ARGV_BUFFER_CAST(float *, bounds, 2)
 
   web_view->env = env;
 
-  napi_create_reference(env, argv[6], 1, &web_view->ctx);
-  napi_create_reference(env, argv[7], 1, &web_view->on_message);
+  napi_create_reference(env, argv[3], 1, &web_view->ctx);
+  napi_create_reference(env, argv[4], 1, &web_view->on_message);
+
+  float x = bounds[0];
+  float y = bounds[1];
+  float width = bounds[2];
+  float height = bounds[3];
 
   fx_web_view_init(app->app, x, y, width, height, &web_view->web_view);
 
@@ -70,13 +72,30 @@ NAPI_METHOD(fx_napi_web_view_destroy) {
   return NULL;
 }
 
-NAPI_METHOD(fx_napi_set_web_view_bounds) {
-  NAPI_ARGV(5)
+NAPI_METHOD(fx_napi_get_web_view_bounds) {
+  NAPI_ARGV(2)
   NAPI_ARGV_BUFFER_CAST(fx_napi_web_view_t *, web_view, 0)
-  NAPI_ARGV_UINT32(x, 1)
-  NAPI_ARGV_UINT32(y, 2)
-  NAPI_ARGV_UINT32(width, 3)
-  NAPI_ARGV_UINT32(height, 4)
+  NAPI_ARGV_BUFFER_CAST(float *, bounds, 1)
+
+  float *x = &bounds[0];
+  float *y = &bounds[1];
+  float *width = &bounds[2];
+  float *height = &bounds[3];
+
+  fx_get_web_view_bounds(web_view->web_view, x, y, width, height);
+
+  return NULL;
+}
+
+NAPI_METHOD(fx_napi_set_web_view_bounds) {
+  NAPI_ARGV(2)
+  NAPI_ARGV_BUFFER_CAST(fx_napi_web_view_t *, web_view, 0)
+  NAPI_ARGV_BUFFER_CAST(float *, bounds, 1)
+
+  float x = bounds[0];
+  float y = bounds[1];
+  float width = bounds[2];
+  float height = bounds[3];
 
   fx_set_web_view_bounds(web_view->web_view, x, y, width, height);
 

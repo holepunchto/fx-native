@@ -1,20 +1,14 @@
 const EventEmitter = require('events')
 const binding = require('../binding')
 
-const App = require('./app')
-
-module.exports = class Node extends EventEmitter {
+module.exports = exports = class Node extends EventEmitter {
   constructor () {
-    const app = App.shared()
-
     super()
 
-    this.app = app
-    this.parent = null
     this.index = -1
-    this.attached = false
-    this.destroyed = false
     this.children = []
+
+    this._state = 0
 
     this.once('destroy', this._ondestroy.bind(this))
   }
@@ -22,7 +16,8 @@ module.exports = class Node extends EventEmitter {
   _ondestroy () {}
 
   _onattach () {
-    this.attached = true
+    this._state |= constants.STATE_ATTACHED
+
     this.emit('attach')
 
     for (const child of this.children) {
@@ -31,7 +26,8 @@ module.exports = class Node extends EventEmitter {
   }
 
   _ondetach () {
-    this.attached = false
+    this._state ^= constants.STATE_ATTACHED
+
     this.emit('detach')
 
     for (const child of this.children) {
@@ -39,8 +35,16 @@ module.exports = class Node extends EventEmitter {
     }
   }
 
+  get attached () {
+    return (this._state & constants.STATE_ATTACHED) !== 0
+  }
+
+  get destroyed () {
+    return (this._state & constants.STATE_ATTACHED) !== 0
+  }
+
   appendChild (child) {
-    if (child.parent) return
+    if (child.index !== -1) return
 
     const index = this.children.length
 
@@ -51,13 +55,13 @@ module.exports = class Node extends EventEmitter {
 
     this.children.push(child)
 
-    if (this.attached) child._onattach()
+    if (this._state & constants.STATE_ATTACHED) child._onattach()
 
     return this
   }
 
   removeChild (child) {
-    if (child.parent !== this) return
+    if (child.index !== -1) return
 
     const index = child.index
 
@@ -68,20 +72,30 @@ module.exports = class Node extends EventEmitter {
 
     this.children[index] = null
 
-    if (this.attached) child._ondetach()
+    if (this._state & constants.STATE_ATTACHED) child._ondetach()
 
     return this
   }
 
   destroy () {
-    if (this.destroyed) return
-    this.destroyed = true
+    if (this._state & constants.STATE_DESTROYED) return
+    this._state |= constants.STATE_DESTROYED
 
     for (const child of this.children) {
       if (child !== null) child.destroy()
     }
 
-    this.attached = false
+    if (this._state & constants.STATE_ATTACHED) {
+      this._state ^= constants.STATE_ATTACHED
+    }
+
     this.emit('destroy')
   }
+}
+
+const constants = exports.constants = {
+  STATE_ATTACHED: 0x1,
+  STATE_DESTROYED: 0x2,
+  STATE_VISIBLE: 0x4,
+  STATE_CLOSED: 0x8
 }
