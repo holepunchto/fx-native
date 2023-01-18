@@ -1,20 +1,25 @@
 const b4a = require('b4a')
+const EventEmitter = require('events')
 const binding = require('../binding')
 
 const App = require('./app')
 const Node = require('./node')
+const View = require('./view')
 
 const constants = Node.constants
 
-module.exports = class Window extends Node {
+module.exports = class Window extends EventEmitter {
   constructor (x = 0, y = 0, width = 0, height = 0) {
     const app = App.shared()
 
     super()
 
+    this._state = 0
+    this._view = new View(0, 0, width, height)
+
     this._handle = b4a.allocUnsafe(binding.sizeof_fx_napi_window_t)
 
-    binding.fx_napi_window_init(app._handle, this._handle, Float32Array.of(x, y, width, height), this,
+    binding.fx_napi_window_init(app._handle, this._handle, this._view._handle, Float32Array.of(x, y, width, height), this,
       this._onresize,
       this._onmove,
       this._onclose
@@ -48,6 +53,16 @@ module.exports = class Window extends Node {
     return (this._state & constants.STATE_CLOSED) !== 0
   }
 
+  appendChild (child) {
+    this._view.appendChild(child)
+    return this
+  }
+
+  removeChild (child) {
+    this._view.removeChild(child)
+    return this
+  }
+
   getBounds () {
     const result = new Float32Array(4)
 
@@ -69,7 +84,7 @@ module.exports = class Window extends Node {
 
     binding.fx_napi_show_window(this._handle)
 
-    this._onattach()
+    this._view._onattach()
   }
 
   hide () {
@@ -78,6 +93,21 @@ module.exports = class Window extends Node {
 
     binding.fx_napi_hide_window(this._handle)
 
-    this._ondetach()
+    this._view._ondetach()
+  }
+
+  destroy () {
+    if (this._state & constants.STATE_DESTROYED) return
+    this._state |= constants.STATE_DESTROYED
+
+    this._view.destroy()
+
+    if (this._state & constants.STATE_ATTACHED) {
+      this._state ^= constants.STATE_ATTACHED
+    }
+
+    this._ondestroy()
+
+    this.emit('destroy')
   }
 }

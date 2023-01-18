@@ -11,6 +11,8 @@ window
   })
   .on('resize', (width, height) => {
     console.log('resize', width, height)
+
+    webview.setBounds(0, 0, width, height)
   })
   .on('close', () => {
     console.log('close')
@@ -39,6 +41,7 @@ app
   .on('launch', () => new Worker(require.resolve('./background')))
   .on('terminate', () => {
     console.log('terminate')
+
     window.destroy()
   })
   .once('message', (message) => {

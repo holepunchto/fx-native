@@ -8,9 +8,9 @@
 
 #include "app.h"
 #include "shared.h"
+#include "view.h"
 
 typedef struct {
-  fx_view_t *view;
   fx_window_t *window;
 
   napi_env env;
@@ -75,26 +75,25 @@ on_window_close (fx_window_t *fx_window) {
 }
 
 NAPI_METHOD(fx_napi_window_init) {
-  NAPI_ARGV(7)
+  NAPI_ARGV(8)
   NAPI_ARGV_BUFFER_CAST(fx_napi_t *, app, 0)
   NAPI_ARGV_BUFFER_CAST(fx_napi_window_t *, window, 1)
-  NAPI_ARGV_BUFFER_CAST(float *, bounds, 2)
+  NAPI_ARGV_BUFFER_CAST(fx_napi_view_t *, view, 2)
+  NAPI_ARGV_BUFFER_CAST(float *, bounds, 3)
 
   window->env = env;
 
-  napi_create_reference(env, argv[3], 1, &window->ctx);
-  napi_create_reference(env, argv[4], 1, &window->on_resize);
-  napi_create_reference(env, argv[5], 1, &window->on_move);
-  napi_create_reference(env, argv[6], 1, &window->on_close);
+  napi_create_reference(env, argv[4], 1, &window->ctx);
+  napi_create_reference(env, argv[5], 1, &window->on_resize);
+  napi_create_reference(env, argv[6], 1, &window->on_move);
+  napi_create_reference(env, argv[7], 1, &window->on_close);
 
   float x = bounds[0];
   float y = bounds[1];
   float width = bounds[2];
   float height = bounds[3];
 
-  fx_view_init(app->app, x, y, width, height, &window->view);
-
-  fx_window_init(app->app, window->view, x, y, width, height, &window->window);
+  fx_window_init(app->app, view->view, x, y, width, height, &window->window);
 
   fx_set_window_data(window->window, (void *) window);
 

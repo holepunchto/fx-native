@@ -36,6 +36,34 @@ See [`example/`](example).
 
 #### `app.on('message', buffer)`
 
+### Window
+
+> :warning: Only available on the main thread.
+
+#### `const window = new Window(x, y, width, height)`
+
+#### `window.visible`
+
+#### `window.closed`
+
+#### `window.appendChild(child)`
+
+#### `window.removeChild(child)`
+
+#### `window.getBounds()`
+
+#### `window.show()`
+
+#### `window.hide()`
+
+#### `window.destroy()`
+
+#### `window.on('resize', width, height)`
+
+#### `window.on('move', x, y)`
+
+#### `window.on('close')`
+
 ### Node
 
 #### `node.attached`
@@ -53,30 +81,6 @@ See [`example/`](example).
 #### `node.on('detach')`
 
 #### `node.on('destroy')`
-
-### Window
-
-Extends [`Node`](#node).
-
-> :warning: Only available on the main thread.
-
-#### `const window = new Window(x, y, width, height)`
-
-#### `window.visible`
-
-#### `window.closed`
-
-#### `window.getBounds()`
-
-#### `window.show()`
-
-#### `window.hide()`
-
-#### `window.on('resize', width, height)`
-
-#### `window.on('move', x, y)`
-
-#### `window.on('close')`
 
 ### View
 
