@@ -5,10 +5,10 @@ module.exports = exports = class Node extends EventEmitter {
   constructor () {
     super()
 
-    this.index = -1
-    this.children = []
-
     this._state = 0
+    this._index = -1
+
+    this.children = []
 
     this.once('destroy', this._ondestroy.bind(this))
   }
@@ -44,14 +44,13 @@ module.exports = exports = class Node extends EventEmitter {
   }
 
   appendChild (child) {
-    if (child.index !== -1) return
+    if (child._index !== -1) return
 
     const index = this.children.length
 
     binding.fx_napi_set_child(this._handle, child._handle, index)
 
-    child.index = index
-    child.parent = this
+    child._index = index
 
     this.children.push(child)
 
@@ -61,14 +60,13 @@ module.exports = exports = class Node extends EventEmitter {
   }
 
   removeChild (child) {
-    if (child.index !== -1) return
+    if (child._index !== -1) return
 
-    const index = child.index
+    const index = child._index
 
     binding.fx_napi_unset_child(this._handle, child._handle, index)
 
-    child.index = -1
-    child.parent = null
+    child._index = -1
 
     this.children[index] = null
 
