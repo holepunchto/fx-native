@@ -9,8 +9,6 @@ module.exports = exports = class Node extends EventEmitter {
     this._index = -1
 
     this.children = []
-
-    this.once('destroy', this._ondestroy.bind(this))
   }
 
   _ondestroy () {}
@@ -86,6 +84,8 @@ module.exports = exports = class Node extends EventEmitter {
     if (this._state & constants.STATE_ATTACHED) {
       this._state ^= constants.STATE_ATTACHED
     }
+
+    this._ondestroy()
 
     this.emit('destroy')
   }
