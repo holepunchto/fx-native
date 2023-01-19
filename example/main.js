@@ -27,9 +27,10 @@ webview
     console.log(message)
   })
   .loadHTML(`
+    <style>body { font-family: system-ui }</style>
     <p>Hello world!<p>
     <script>
-    bridge.postMessage({ from:'WebView' })
+    bridge.postMessage({ from: 'WebView' })
     </script>
   `)
 
