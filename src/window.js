@@ -15,7 +15,7 @@ module.exports = class Window extends EventEmitter {
     super()
 
     this._state = 0
-    this._view = new View(0, 0, width, height)
+    this._view = new View()
 
     this._handle = b4a.allocUnsafe(binding.sizeof_fx_napi_window_t)
 
