@@ -7,8 +7,7 @@ module.exports = exports = class Node extends EventEmitter {
 
     this._state = 0
     this._index = -1
-
-    this.children = []
+    this._children = []
   }
 
   _ondestroy () {}
@@ -18,7 +17,7 @@ module.exports = exports = class Node extends EventEmitter {
 
     this.emit('attach')
 
-    for (const child of this.children) {
+    for (const child of this._children) {
       if (child !== null) child._onattach()
     }
   }
@@ -28,7 +27,7 @@ module.exports = exports = class Node extends EventEmitter {
 
     this.emit('detach')
 
-    for (const child of this.children) {
+    for (const child of this._children) {
       if (child !== null) child._ondetach()
     }
   }
@@ -44,13 +43,13 @@ module.exports = exports = class Node extends EventEmitter {
   appendChild (child) {
     if (child._index !== -1) return
 
-    const index = this.children.length
+    const index = this._children.length
 
     binding.fx_napi_set_child(this._handle, child._handle, index)
 
     child._index = index
 
-    this.children.push(child)
+    this._children.push(child)
 
     if (this._state & constants.STATE_ATTACHED) child._onattach()
 
@@ -66,7 +65,7 @@ module.exports = exports = class Node extends EventEmitter {
 
     child._index = -1
 
-    this.children[index] = null
+    this._children[index] = null
 
     if (this._state & constants.STATE_ATTACHED) child._ondetach()
 
@@ -77,7 +76,7 @@ module.exports = exports = class Node extends EventEmitter {
     if (this._state & constants.STATE_DESTROYED) return
     this._state |= constants.STATE_DESTROYED
 
-    for (const child of this.children) {
+    for (const child of this._children) {
       if (child !== null) child.destroy()
     }
 
