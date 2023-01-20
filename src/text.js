@@ -19,6 +19,18 @@ module.exports = class Text extends Node {
     binding.fx_napi_text_destroy(this._handle)
   }
 
+  appendChild (child) {
+    if (typeof child === 'string') return this.appendSpan(child)
+
+    return super.appendChild(child)
+  }
+
+  appendSpan (value) {
+    Text.createSpan(value).appendTo(this)
+
+    return this
+  }
+
   setBounds (x, y, width, height) {
     binding.fx_napi_set_text_bounds(this._handle, Float32Array.of(x, y, width, height))
   }
@@ -51,18 +63,6 @@ module.exports = class Text extends Node {
       width,
       height
     }
-  }
-
-  appendChild (child) {
-    if (typeof child === 'string') return this.appendSpan(child)
-
-    return super.appendChild(child)
-  }
-
-  appendSpan (value) {
-    Text.createSpan(value).appendTo(this)
-
-    return this
   }
 
   static createSpan (value) {
