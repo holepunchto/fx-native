@@ -64,6 +64,10 @@ See [`example/`](example).
 
 #### `window.on('close')`
 
+#### `window.on('show')`
+
+#### `window.on('hide')`
+
 ### Node
 
 #### `node.attached`

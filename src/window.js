@@ -85,6 +85,8 @@ module.exports = class Window extends EventEmitter {
     binding.fx_napi_show_window(this._handle)
 
     this._view._onattach()
+
+    this.emit('show')
   }
 
   hide () {
@@ -94,6 +96,8 @@ module.exports = class Window extends EventEmitter {
     binding.fx_napi_hide_window(this._handle)
 
     this._view._ondetach()
+
+    this.emit('hide')
   }
 
   destroy () {
