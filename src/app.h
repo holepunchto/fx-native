@@ -16,6 +16,8 @@ typedef struct {
 
   napi_ref on_launch;
   napi_ref on_terminate;
+  napi_ref on_suspend;
+  napi_ref on_resume;
   napi_ref on_message;
 } fx_napi_t;
 
@@ -55,6 +57,32 @@ on_terminate (fx_t *fx_app) {
 }
 
 static void
+on_suspend (fx_t *fx_app) {
+  fx_napi_t *app;
+
+  fx_get_data(fx_app, (void **) &app);
+
+  napi_env env = app->env;
+
+  FX_NAPI_CALLBACK(app, app->on_suspend, {
+    NAPI_MAKE_CALLBACK(env, NULL, ctx, callback, 0, NULL, NULL);
+  })
+}
+
+static void
+on_resume (fx_t *fx_app) {
+  fx_napi_t *app;
+
+  fx_get_data(fx_app, (void **) &app);
+
+  napi_env env = app->env;
+
+  FX_NAPI_CALLBACK(app, app->on_resume, {
+    NAPI_MAKE_CALLBACK(env, NULL, ctx, callback, 0, NULL, NULL);
+  })
+}
+
+static void
 on_message (fx_t *receiver, const uv_buf_t *buf, fx_t *sender) {
   fx_napi_t *app;
 
@@ -70,7 +98,7 @@ on_message (fx_t *receiver, const uv_buf_t *buf, fx_t *sender) {
 }
 
 NAPI_METHOD(fx_napi_init) {
-  NAPI_ARGV(5)
+  NAPI_ARGV(7)
   NAPI_ARGV_BUFFER_CAST(fx_napi_t *, app, 0)
 
   app->env = env;
@@ -78,7 +106,9 @@ NAPI_METHOD(fx_napi_init) {
   napi_create_reference(env, argv[1], 1, &app->ctx);
   napi_create_reference(env, argv[2], 1, &app->on_launch);
   napi_create_reference(env, argv[3], 1, &app->on_terminate);
-  napi_create_reference(env, argv[4], 1, &app->on_message);
+  napi_create_reference(env, argv[4], 1, &app->on_suspend);
+  napi_create_reference(env, argv[5], 1, &app->on_resume);
+  napi_create_reference(env, argv[6], 1, &app->on_message);
 
   uv_loop_t *loop;
   napi_get_uv_event_loop(env, &loop);
@@ -89,6 +119,8 @@ NAPI_METHOD(fx_napi_init) {
 
   fx_on_launch(app->app, on_launch);
   fx_on_terminate(app->app, on_terminate);
+  fx_on_suspend(app->app, on_suspend);
+  fx_on_resume(app->app, on_resume);
 
   fx_read_start(app->app, on_message);
 
@@ -103,6 +135,8 @@ NAPI_METHOD(fx_napi_destroy) {
 
   napi_delete_reference(env, app->on_launch);
   napi_delete_reference(env, app->on_terminate);
+  napi_delete_reference(env, app->on_suspend);
+  napi_delete_reference(env, app->on_resume);
   napi_delete_reference(env, app->on_message);
   napi_delete_reference(env, app->ctx);
 

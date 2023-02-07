@@ -1,12 +1,11 @@
-const b4a = require('b4a')
 const EventEmitter = require('events')
+const b4a = require('b4a')
 const binding = require('../binding')
 
 const App = require('./app')
-const Node = require('./node')
 const View = require('./view')
 
-const constants = Node.constants
+const constants = require('./constants')
 
 module.exports = class Window extends EventEmitter {
   constructor (x = 0, y = 0, width = 0, height = 0) {

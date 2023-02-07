@@ -1,6 +1,8 @@
-const b4a = require('b4a')
 const EventEmitter = require('events')
+const b4a = require('b4a')
 const binding = require('../binding')
+
+const constants = require('./constants')
 
 function ondispatch () {
   this.resolve()
@@ -10,13 +12,15 @@ module.exports = class App extends EventEmitter {
   constructor () {
     super()
 
-    this.running = false
+    this._state = 0
 
     this._handle = b4a.allocUnsafe(binding.sizeof_fx_napi_t)
 
     binding.fx_napi_init(this._handle, this,
       this._onlaunch,
       this._onterminate,
+      this._onsuspend,
+      this._onresume,
       this._onmessage
     )
 
@@ -38,17 +42,35 @@ module.exports = class App extends EventEmitter {
   }
 
   _onlaunch () {
-    this.running = true
+    this._state |= constants.STATE_RUNNING
     this.emit('launch')
   }
 
   _onterminate () {
-    this.running = false
+    this._state ^= constants.STATE_RUNNING
     this.emit('terminate')
+  }
+
+  _onsuspend () {
+    this._state |= constants.STATE_SUSPENDED
+    this.emit('suspend')
+  }
+
+  _onresume () {
+    this._state ^= constants.STATE_SUSPENDED
+    this.emit('resume')
   }
 
   _onmessage (message) {
     this.emit('message', message)
+  }
+
+  get running () {
+    return (this._state & constants.STATE_RUNNING) !== 0
+  }
+
+  get suspended () {
+    return (this._state & constants.STATE_SUSPENDED) !== 0
   }
 
   run () {

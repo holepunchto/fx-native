@@ -1,6 +1,8 @@
 const EventEmitter = require('events')
 const binding = require('../binding')
 
+const constants = require('./constants')
+
 module.exports = exports = class Node extends EventEmitter {
   constructor () {
     super()
@@ -88,11 +90,4 @@ module.exports = exports = class Node extends EventEmitter {
 
     this.emit('destroy')
   }
-}
-
-const constants = exports.constants = {
-  STATE_ATTACHED: 0x1,
-  STATE_DESTROYED: 0x2,
-  STATE_VISIBLE: 0x4,
-  STATE_CLOSED: 0x8
 }
