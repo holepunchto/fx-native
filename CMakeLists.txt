@@ -23,7 +23,7 @@ target_include_directories(
 )
 
 target_link_libraries(
-  fx_native_module
+  fx_native
   PUBLIC
     fx
 )
