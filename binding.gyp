@@ -29,6 +29,11 @@
           '-framework WebKit'
         ],
       }],
+      ['OS=="win"', {
+        'libraries': [
+          '<(module_root_dir)/vendor/libfx/src/win32/webview2/<(target_arch)/WebView2LoaderStatic',
+        ],
+      }],
     ],
   }]
 }
