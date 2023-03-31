@@ -23,16 +23,18 @@ window
 const webview = new WebView(0, 0, 500, 500)
 
 webview
+  .on('ready', () => {
+    webview.loadHTML(`
+      <style>body { font-family: system-ui }</style>
+      <p>Hello world!<p>
+      <script>
+      bridge.postMessage({ from: 'WebView' })
+      </script>
+    `)
+  })
   .on('message', (message) => {
     console.log(message)
   })
-  .loadHTML(`
-    <style>body { font-family: system-ui }</style>
-    <p>Hello world!<p>
-    <script>
-    bridge.postMessage({ from: 'WebView' })
-    </script>
-  `)
 
 window
   .appendChild(webview)

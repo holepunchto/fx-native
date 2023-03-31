@@ -120,6 +120,8 @@ Extends [`Node`](#node).
 
 #### `const webView = new WebView(x, y, width, height)`
 
+#### `webView.ready`
+
 #### `webView.getBounds()`
 
 #### `webView.setBounds(x, y, width, height)`
@@ -129,6 +131,8 @@ Extends [`Node`](#node).
 #### `webView.loadURL(url)`
 
 #### `webView.loadHTML(html)`
+
+#### `webView.on('ready')`
 
 #### `webView.on('message', json)`
 

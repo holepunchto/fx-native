@@ -17,8 +17,22 @@ typedef struct {
   napi_env env;
   napi_ref ctx;
 
+  napi_ref on_ready;
   napi_ref on_message;
 } fx_napi_web_view_t;
+
+static void
+on_web_view_ready (fx_web_view_t *fx_web_view, int status) {
+  fx_napi_web_view_t *web_view;
+
+  fx_get_web_view_data(fx_web_view, (void **) &web_view);
+
+  napi_env env = web_view->env;
+
+  FX_NAPI_CALLBACK(web_view, web_view->on_ready, {
+    NAPI_MAKE_CALLBACK(env, NULL, ctx, callback, 0, NULL, NULL);
+  })
+}
 
 static void
 on_web_view_message (fx_web_view_t *fx_web_view, const char *message) {
@@ -36,7 +50,7 @@ on_web_view_message (fx_web_view_t *fx_web_view, const char *message) {
 }
 
 NAPI_METHOD(fx_napi_web_view_init) {
-  NAPI_ARGV(5)
+  NAPI_ARGV(6)
   NAPI_ARGV_BUFFER_CAST(fx_napi_t *, app, 0)
   NAPI_ARGV_BUFFER_CAST(fx_napi_web_view_t *, web_view, 1)
   NAPI_ARGV_BUFFER_CAST(float *, bounds, 2)
@@ -44,14 +58,15 @@ NAPI_METHOD(fx_napi_web_view_init) {
   web_view->env = env;
 
   napi_create_reference(env, argv[3], 1, &web_view->ctx);
-  napi_create_reference(env, argv[4], 1, &web_view->on_message);
+  napi_create_reference(env, argv[4], 1, &web_view->on_ready);
+  napi_create_reference(env, argv[5], 1, &web_view->on_message);
 
   float x = bounds[0];
   float y = bounds[1];
   float width = bounds[2];
   float height = bounds[3];
 
-  fx_web_view_init(app->app, x, y, width, height, &web_view->web_view);
+  fx_web_view_init(app->app, x, y, width, height, on_web_view_ready, &web_view->web_view);
 
   fx_set_web_view_data(web_view->web_view, (void *) web_view);
 
@@ -66,6 +81,7 @@ NAPI_METHOD(fx_napi_web_view_destroy) {
 
   fx_web_view_destroy(web_view->web_view);
 
+  napi_delete_reference(env, web_view->on_ready);
   napi_delete_reference(env, web_view->on_message);
   napi_delete_reference(env, web_view->ctx);
 
