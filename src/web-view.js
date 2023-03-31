@@ -25,7 +25,6 @@ module.exports = class WebView extends Node {
 
   _onready () {
     this._state |= constants.STATE_READY
-
     this.emit('ready')
   }
 
