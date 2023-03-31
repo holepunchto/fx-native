@@ -1,3 +1,4 @@
+const path = require('path')
 const b4a = require('b4a')
 const binding = require('../binding')
 
@@ -7,14 +8,16 @@ const Node = require('./node')
 const constants = require('./constants')
 
 module.exports = class WebView extends Node {
-  constructor (x = 0, y = 0, width = 0, height = 0) {
+  constructor (dataDirectory = path.resolve('webview'), x = 0, y = 0, width = 0, height = 0) {
     const app = App.shared()
 
     super()
 
     this._handle = b4a.allocUnsafe(binding.sizeof_fx_napi_web_view_t)
 
-    binding.fx_napi_web_view_init(app._handle, this._handle, Float32Array.of(x, y, width, height), this,
+    const bounds = Float32Array.of(x, y, width, height)
+
+    binding.fx_napi_web_view_init(app._handle, this._handle, dataDirectory, bounds, this,
       this._onready,
       this._onmessage
     )

@@ -118,7 +118,7 @@ Extends [`Node`](#node).
 
 > :warning: Only available on the main thread.
 
-#### `const webView = new WebView(x, y, width, height)`
+#### `const webView = new WebView(dataDirectory, x, y, width, height)`
 
 #### `webView.ready`
 
