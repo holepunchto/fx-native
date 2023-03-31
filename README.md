@@ -134,4 +134,4 @@ Extends [`Node`](#node).
 
 ## License
 
-ISC
+Apache-2.0
