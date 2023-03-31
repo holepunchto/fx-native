@@ -4,9 +4,11 @@ const { App, Window, WebView } = require('..')
 
 const app = App.shared()
 
+let window
+
 app
   .on('launch', () => {
-    const window = new Window(0, 0, 500, 500)
+    window = new Window(0, 0, 500, 500)
 
     window
       .on('move', (x, y) => {
