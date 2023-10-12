@@ -2,13 +2,13 @@ cmake_minimum_required(VERSION 3.25)
 
 project(fx_native C)
 
-include(pear)
+include(bare)
 
 if(NOT TARGET fx)
   add_subdirectory(vendor/libfx EXCLUDE_FROM_ALL)
 endif()
 
-add_pear_module(fx_native)
+add_bare_module(fx_native)
 
 target_sources(
   fx_native
