@@ -42,7 +42,15 @@ See [`example/`](example).
 
 > :warning: Only available on the main thread.
 
-#### `const window = new Window(x, y, width, height)`
+#### `const window = new Window(x, y, width, height[, options])`
+
+Options include:
+
+```js
+options = {
+  frame: true
+}
+```
 
 #### `window.visible`
 

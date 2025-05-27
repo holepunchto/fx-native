@@ -7,7 +7,7 @@ let window
 
 app
   .on('launch', () => {
-    window = new Window(0, 0, 500, 500)
+    window = new Window(0, 0, 500, 500, { frame: false })
 
     window
       .on('move', (x, y) => {

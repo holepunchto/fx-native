@@ -132,13 +132,13 @@ static js_value_t *
 fx_native_init_window(js_env_t *env, js_callback_info_t *info) {
   int err;
 
-  size_t argc = 7;
-  js_value_t *argv[7];
+  size_t argc = 8;
+  js_value_t *argv[8];
 
   err = js_get_callback_info(env, info, &argc, argv, NULL, NULL);
   assert(err == 0);
 
-  assert(argc == 7);
+  assert(argc == 8);
 
   fx_native_t *app;
   err = js_get_arraybuffer_info(env, argv[0], (void **) &app, NULL);
@@ -152,6 +152,10 @@ fx_native_init_window(js_env_t *env, js_callback_info_t *info) {
   err = js_get_typedarray_info(env, argv[2], NULL, (void **) &bounds, NULL, NULL, NULL);
   assert(err == 0);
 
+  bool frame;
+  err = js_get_value_bool(env, argv[3], &frame);
+  assert(err == 0);
+
   js_value_t *handle;
 
   fx_native_window_t *window;
@@ -160,16 +164,16 @@ fx_native_init_window(js_env_t *env, js_callback_info_t *info) {
 
   window->env = env;
 
-  err = js_create_reference(env, argv[3], 1, &window->ctx);
+  err = js_create_reference(env, argv[4], 1, &window->ctx);
   assert(err == 0);
 
-  err = js_create_reference(env, argv[4], 1, &window->on_resize);
+  err = js_create_reference(env, argv[5], 1, &window->on_resize);
   assert(err == 0);
 
-  err = js_create_reference(env, argv[5], 1, &window->on_move);
+  err = js_create_reference(env, argv[6], 1, &window->on_move);
   assert(err == 0);
 
-  err = js_create_reference(env, argv[6], 1, &window->on_close);
+  err = js_create_reference(env, argv[7], 1, &window->on_close);
   assert(err == 0);
 
   float x = bounds[0];
@@ -177,7 +181,11 @@ fx_native_init_window(js_env_t *env, js_callback_info_t *info) {
   float width = bounds[2];
   float height = bounds[3];
 
-  err = fx_window_init(app->app, view->view, x, y, width, height, 0, &window->window);
+  int flags = 0;
+
+  if (frame == false) flags |= fx_window_no_frame;
+
+  err = fx_window_init(app->app, view->view, x, y, width, height, flags, &window->window);
   assert(err == 0);
 
   err = fx_set_window_data(window->window, (void *) window);
