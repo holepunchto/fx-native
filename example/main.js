@@ -7,7 +7,7 @@ let window
 
 app
   .on('launch', () => {
-    window = new Window(0, 0, 500, 500, { frame: false })
+    window = new Window(0, 0, 500, 500)
 
     window
       .on('move', (x, y) => {
@@ -15,6 +15,12 @@ app
       })
       .on('resize', (width, height) => {
         console.log('resize', width, height)
+      })
+      .on('minimize', () => {
+        console.log('minimize')
+      })
+      .on('deminimize', () => {
+        console.log('deminimize')
       })
       .on('close', () => {
         console.log('close')

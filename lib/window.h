@@ -17,6 +17,8 @@ typedef struct {
 
   js_ref_t *on_resize;
   js_ref_t *on_move;
+  js_ref_t *on_minimize;
+  js_ref_t *on_deminimize;
   js_ref_t *on_close;
 } fx_native_window_t;
 
@@ -101,6 +103,62 @@ fx_native__on_window_move(fx_window_t *fx_window) {
 }
 
 static void
+fx_native__on_window_minimize(fx_window_t *fx_window) {
+  int err;
+
+  fx_native_window_t *window;
+  err = fx_get_window_data(fx_window, (void **) &window);
+  assert(err == 0);
+
+  js_env_t *env = window->env;
+
+  js_handle_scope_t *scope;
+  err = js_open_handle_scope(env, &scope);
+  assert(err == 0);
+
+  js_value_t *ctx;
+  err = js_get_reference_value(env, window->ctx, &ctx);
+  assert(err == 0);
+
+  js_value_t *on_minimize;
+  err = js_get_reference_value(env, window->on_minimize, &on_minimize);
+  assert(err == 0);
+
+  js_call_function_with_checkpoint(env, ctx, on_minimize, 0, NULL, NULL);
+
+  err = js_close_handle_scope(env, scope);
+  assert(err == 0);
+}
+
+static void
+fx_native__on_window_deminimize(fx_window_t *fx_window) {
+  int err;
+
+  fx_native_window_t *window;
+  err = fx_get_window_data(fx_window, (void **) &window);
+  assert(err == 0);
+
+  js_env_t *env = window->env;
+
+  js_handle_scope_t *scope;
+  err = js_open_handle_scope(env, &scope);
+  assert(err == 0);
+
+  js_value_t *ctx;
+  err = js_get_reference_value(env, window->ctx, &ctx);
+  assert(err == 0);
+
+  js_value_t *on_deminimize;
+  err = js_get_reference_value(env, window->on_deminimize, &on_deminimize);
+  assert(err == 0);
+
+  js_call_function_with_checkpoint(env, ctx, on_deminimize, 0, NULL, NULL);
+
+  err = js_close_handle_scope(env, scope);
+  assert(err == 0);
+}
+
+static void
 fx_native__on_window_close(fx_window_t *fx_window) {
   int err;
 
@@ -132,13 +190,13 @@ static js_value_t *
 fx_native_init_window(js_env_t *env, js_callback_info_t *info) {
   int err;
 
-  size_t argc = 8;
-  js_value_t *argv[8];
+  size_t argc = 10;
+  js_value_t *argv[10];
 
   err = js_get_callback_info(env, info, &argc, argv, NULL, NULL);
   assert(err == 0);
 
-  assert(argc == 8);
+  assert(argc == 10);
 
   fx_native_t *app;
   err = js_get_arraybuffer_info(env, argv[0], (void **) &app, NULL);
@@ -173,7 +231,13 @@ fx_native_init_window(js_env_t *env, js_callback_info_t *info) {
   err = js_create_reference(env, argv[6], 1, &window->on_move);
   assert(err == 0);
 
-  err = js_create_reference(env, argv[7], 1, &window->on_close);
+  err = js_create_reference(env, argv[7], 1, &window->on_minimize);
+  assert(err == 0);
+
+  err = js_create_reference(env, argv[8], 1, &window->on_deminimize);
+  assert(err == 0);
+
+  err = js_create_reference(env, argv[9], 1, &window->on_close);
   assert(err == 0);
 
   float x = bounds[0];
@@ -195,6 +259,12 @@ fx_native_init_window(js_env_t *env, js_callback_info_t *info) {
   assert(err == 0);
 
   err = fx_on_window_move(window->window, fx_native__on_window_move);
+  assert(err == 0);
+
+  err = fx_on_window_minimize(window->window, fx_native__on_window_minimize);
+  assert(err == 0);
+
+  err = fx_on_window_deminimize(window->window, fx_native__on_window_deminimize);
   assert(err == 0);
 
   err = fx_on_window_close(window->window, fx_native__on_window_close);
@@ -226,6 +296,12 @@ fx_native_destroy_window(js_env_t *env, js_callback_info_t *info) {
   assert(err == 0);
 
   err = js_delete_reference(env, window->on_move);
+  assert(err == 0);
+
+  err = js_delete_reference(env, window->on_minimize);
+  assert(err == 0);
+
+  err = js_delete_reference(env, window->on_deminimize);
   assert(err == 0);
 
   err = js_delete_reference(env, window->on_close);
@@ -307,6 +383,50 @@ fx_native_hide_window(js_env_t *env, js_callback_info_t *info) {
   assert(err == 0);
 
   err = fx_hide_window(window->window);
+  assert(err == 0);
+
+  return NULL;
+}
+
+static js_value_t *
+fx_native_activate_window(js_env_t *env, js_callback_info_t *info) {
+  int err;
+
+  size_t argc = 1;
+  js_value_t *argv[1];
+
+  err = js_get_callback_info(env, info, &argc, argv, NULL, NULL);
+  assert(err == 0);
+
+  assert(argc == 1);
+
+  fx_native_window_t *window;
+  err = js_get_arraybuffer_info(env, argv[0], (void **) &window, NULL);
+  assert(err == 0);
+
+  err = fx_activate_window(window->window);
+  assert(err == 0);
+
+  return NULL;
+}
+
+static js_value_t *
+fx_native_close_window(js_env_t *env, js_callback_info_t *info) {
+  int err;
+
+  size_t argc = 1;
+  js_value_t *argv[1];
+
+  err = js_get_callback_info(env, info, &argc, argv, NULL, NULL);
+  assert(err == 0);
+
+  assert(argc == 1);
+
+  fx_native_window_t *window;
+  err = js_get_arraybuffer_info(env, argv[0], (void **) &window, NULL);
+  assert(err == 0);
+
+  err = fx_close_window(window->window);
   assert(err == 0);
 
   return NULL;

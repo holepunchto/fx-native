@@ -16,11 +16,13 @@ See [`example/`](example).
 
 #### `const app = App.shared()`
 
-#### `app.running`
-
 #### `app.isMain`
 
 #### `app.isWorker`
+
+#### `app.isRunning`
+
+#### `app.isSuspended`
 
 #### `app.run()`
 
@@ -50,9 +52,9 @@ options = {
 }
 ```
 
-#### `window.visible`
+#### `window.isVisible`
 
-#### `window.closed`
+#### `window.isClosed`
 
 #### `window.appendChild(child)`
 
@@ -64,11 +66,17 @@ options = {
 
 #### `window.hide()`
 
+#### `window.activate()`
+
 #### `window.destroy()`
 
 #### `window.on('resize', width, height)`
 
 #### `window.on('move', x, y)`
+
+#### `window.on('minimize')`
+
+#### `window.on('deminimize')`
 
 #### `window.on('close')`
 
@@ -78,9 +86,9 @@ options = {
 
 ### Node
 
-#### `node.attached`
+#### `node.isAttached`
 
-#### `node.destroyed`
+#### `node.isDestroyed`
 
 #### `node.appendChild(child)`
 
@@ -143,8 +151,6 @@ Extends [`Node`](#node).
 > :warning: Only available on the main thread.
 
 #### `const webView = new WebView(x, y, width, height)`
-
-#### `webView.ready`
 
 #### `webView.getBounds()`
 

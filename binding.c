@@ -37,6 +37,8 @@ fx_native_exports(js_env_t *env, js_value_t *exports) {
   V("getWindowBounds", fx_native_get_window_bounds)
   V("showWindow", fx_native_show_window)
   V("hideWindow", fx_native_hide_window)
+  V("activateWindow", fx_native_activate_window)
+  V("closeWindow", fx_native_close_window)
 
   V("initView", fx_native_init_view)
   V("destroyView", fx_native_destroy_view)
