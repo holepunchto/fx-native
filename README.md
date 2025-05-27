@@ -26,8 +26,6 @@ See [`example/`](example).
 
 > :warning: Only has an effect on the main thread.
 
-#### `app.dispatch(cb)`
-
 #### `app.broadcast(buffer)`
 
 #### `app.destroy()`

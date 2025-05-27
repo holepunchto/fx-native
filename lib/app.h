@@ -20,13 +20,6 @@ typedef struct {
   js_ref_t *on_message;
 } fx_native_t;
 
-typedef struct {
-  js_env_t *env;
-  js_ref_t *ctx;
-
-  js_ref_t *on_dispatch;
-} fx_native_dispatch_t;
-
 static void
 fx_native__on_suspend(fx_t *fx_app) {
   int err;
@@ -321,70 +314,6 @@ fx_native_is_main(js_env_t *env, js_callback_info_t *info) {
   assert(err == 0);
 
   return result;
-}
-
-static void
-fx_native__on_dispatch(fx_t *fx_app, void *data) {
-  int err;
-
-  fx_native_dispatch_t *req = (fx_native_dispatch_t *) data;
-
-  js_env_t *env = req->env;
-
-  js_handle_scope_t *scope;
-  err = js_open_handle_scope(env, &scope);
-  assert(err == 0);
-
-  js_value_t *ctx;
-  err = js_get_reference_value(env, req->ctx, &ctx);
-  assert(err == 0);
-
-  js_value_t *on_dispatch;
-  err = js_get_reference_value(env, req->on_dispatch, &on_dispatch);
-  assert(err == 0);
-
-  err = js_delete_reference(env, req->on_dispatch);
-  assert(err == 0);
-
-  err = js_delete_reference(env, req->ctx);
-  assert(err == 0);
-
-  js_call_function_with_checkpoint(env, ctx, on_dispatch, 0, NULL, NULL);
-
-  err = js_close_handle_scope(env, scope);
-  assert(err == 0);
-}
-
-static js_value_t *
-fx_native_dispatch(js_env_t *env, js_callback_info_t *info) {
-  int err;
-
-  size_t argc = 2;
-  js_value_t *argv[2];
-
-  err = js_get_callback_info(env, info, &argc, argv, NULL, NULL);
-  assert(err == 0);
-
-  assert(argc == 2);
-
-  js_value_t *handle;
-
-  fx_native_dispatch_t *req;
-  err = js_create_arraybuffer(env, sizeof(fx_native_dispatch_t), (void **) &req, &handle);
-  assert(err == 0);
-
-  req->env = env;
-
-  err = js_create_reference(env, argv[0], 1, &req->ctx);
-  assert(err == 0);
-
-  err = js_create_reference(env, argv[1], 1, &req->on_dispatch);
-  assert(err == 0);
-
-  err = fx_dispatch(fx_native__on_dispatch, (void *) req);
-  assert(err == 0);
-
-  return NULL;
 }
 
 static js_value_t *

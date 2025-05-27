@@ -27,7 +27,6 @@ fx_native_exports(js_env_t *env, js_value_t *exports) {
   V("destroy", fx_native_destroy)
   V("run", fx_native_run)
   V("isMain", fx_native_is_main)
-  V("dispatch", fx_native_dispatch)
   V("broadcast", fx_native_broadcast)
 
   V("setChild", fx_native_set_child)
