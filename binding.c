@@ -3,6 +3,7 @@
 #include <js.h>
 
 #include "lib/app.h"
+#include "lib/image.h"
 #include "lib/node.h"
 #include "lib/text.h"
 #include "lib/view.h"
@@ -51,6 +52,13 @@ fx_native_exports(js_env_t *env, js_value_t *exports) {
   V("initTextSpan", fx_native_init_text_span)
   V("appendTextSpan", fx_native_append_text_span)
 
+  V("initImage", fx_native_init_image)
+  V("destroyImage", fx_native_destroy_image)
+  V("getImageBounds", fx_native_get_image_bounds)
+  V("setImageBounds", fx_native_set_image_bounds)
+  V("loadImageFile", fx_native_load_image_file)
+  V("loadImagePixels", fx_native_load_image_pixels)
+
   V("initWebView", fx_native_init_web_view)
   V("destroyWebView", fx_native_destroy_web_view)
   V("getWebViewBounds", fx_native_get_web_view_bounds)
@@ -58,6 +66,7 @@ fx_native_exports(js_env_t *env, js_value_t *exports) {
   V("postWebViewMessage", fx_native_post_web_view_message)
   V("loadWebViewUrl", fx_native_load_web_view_url)
   V("loadWebViewHtml", fx_native_load_web_view_html)
+#undef V
 
   return exports;
 }

@@ -26,11 +26,11 @@ See [`example/`](example).
 
 > :warning: Only has an effect on the main thread.
 
-#### `app.destroy()`
-
 #### `app.dispatch(cb)`
 
 #### `app.broadcast(buffer)`
+
+#### `app.destroy()`
 
 #### `app.on('launch')`
 
@@ -113,6 +113,22 @@ Extends [`Node`](#node).
 #### `text.getBoundsUsed()`
 
 #### `text.setBounds(x, y, width, height)`
+
+### Image
+
+Extends [`Node`](#node).
+
+> :warning: Only available on the main thread.
+
+#### `const image = new Image(x, y, width, height)`
+
+#### `image.getBounds()`
+
+#### `image.setBounds(x, y, width, height)`
+
+#### `image.loadFile(path)`
+
+#### `image.loadPixels(pixels, width, height[, stride])`
 
 ### Web View
 

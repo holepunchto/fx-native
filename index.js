@@ -1,10 +1,11 @@
-const App = (exports.App = require('./lib/app'))
+exports.App = require('./lib/app')
 
-const app = App.shared()
+const app = exports.App.shared()
 
 if (app.isMain) {
-  exports.Window = require('./lib/window')
-  exports.View = require('./lib/view')
+  exports.Image = require('./lib/image')
   exports.Text = require('./lib/text')
+  exports.View = require('./lib/view')
   exports.WebView = require('./lib/web-view')
+  exports.Window = require('./lib/window')
 }
