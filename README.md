@@ -1,6 +1,6 @@
 # fx-native
 
-https://github.com/holepunchto/libfx JavaScript bindings for Node.js.
+<https://github.com/holepunchto/libfx> bindings for JavaScript.
 
 ```sh
 npm install fx-native
