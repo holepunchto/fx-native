@@ -1,55 +1,65 @@
-#include <napi-macros.h>
+#include <assert.h>
+#include <bare.h>
+#include <js.h>
 
-#include "src/app.h"
-#include "src/node.h"
-#include "src/text.h"
-#include "src/view.h"
-#include "src/web-view.h"
-#include "src/window.h"
+#include "lib/app.h"
+#include "lib/node.h"
+#include "lib/text.h"
+#include "lib/view.h"
+#include "lib/web-view.h"
+#include "lib/window.h"
 
-NAPI_INIT() {
-  NAPI_EXPORT_SIZEOF(fx_napi_t)
-  NAPI_EXPORT_SIZEOF(fx_napi_dispatch_t)
-  NAPI_EXPORT_SIZEOF(fx_napi_window_t)
-  NAPI_EXPORT_SIZEOF(fx_napi_view_t)
-  NAPI_EXPORT_SIZEOF(fx_napi_text_t)
-  NAPI_EXPORT_SIZEOF(fx_napi_text_span_t)
-  NAPI_EXPORT_SIZEOF(fx_napi_web_view_t)
+static js_value_t *
+fx_native_exports(js_env_t *env, js_value_t *exports) {
+  int err;
 
-  NAPI_EXPORT_FUNCTION(fx_napi_init)
-  NAPI_EXPORT_FUNCTION(fx_napi_destroy)
-  NAPI_EXPORT_FUNCTION(fx_napi_run)
-  NAPI_EXPORT_FUNCTION(fx_napi_terminate)
-  NAPI_EXPORT_FUNCTION(fx_napi_is_main)
-  NAPI_EXPORT_FUNCTION(fx_napi_dispatch)
-  NAPI_EXPORT_FUNCTION(fx_napi_broadcast)
+#define V(name, fn) \
+  { \
+    js_value_t *val; \
+    err = js_create_function(env, name, -1, fn, NULL, &val); \
+    assert(err == 0); \
+    err = js_set_named_property(env, exports, name, val); \
+    assert(err == 0); \
+  }
 
-  NAPI_EXPORT_FUNCTION(fx_napi_set_child)
-  NAPI_EXPORT_FUNCTION(fx_napi_unset_child)
+  V("init", fx_native_init)
+  V("destroy", fx_native_destroy)
+  V("run", fx_native_run)
+  V("isMain", fx_native_is_main)
+  V("dispatch", fx_native_dispatch)
+  V("broadcast", fx_native_broadcast)
 
-  NAPI_EXPORT_FUNCTION(fx_napi_window_init)
-  NAPI_EXPORT_FUNCTION(fx_napi_window_destroy)
-  NAPI_EXPORT_FUNCTION(fx_napi_get_window_bounds)
-  NAPI_EXPORT_FUNCTION(fx_napi_show_window)
-  NAPI_EXPORT_FUNCTION(fx_napi_hide_window)
+  V("setChild", fx_native_set_child)
+  V("unsetChild", fx_native_unset_child)
 
-  NAPI_EXPORT_FUNCTION(fx_napi_view_init)
-  NAPI_EXPORT_FUNCTION(fx_napi_view_destroy)
-  NAPI_EXPORT_FUNCTION(fx_napi_get_view_bounds)
-  NAPI_EXPORT_FUNCTION(fx_napi_set_view_bounds)
+  V("initWindow", fx_native_init_window)
+  V("destroyWindow", fx_native_destroy_window)
+  V("getWindowBounds", fx_native_get_window_bounds)
+  V("showWindow", fx_native_show_window)
+  V("hideWindow", fx_native_hide_window)
 
-  NAPI_EXPORT_FUNCTION(fx_napi_text_init)
-  NAPI_EXPORT_FUNCTION(fx_napi_text_destroy)
-  NAPI_EXPORT_FUNCTION(fx_napi_get_text_bounds)
-  NAPI_EXPORT_FUNCTION(fx_napi_get_text_bounds_used)
-  NAPI_EXPORT_FUNCTION(fx_napi_set_text_bounds)
-  NAPI_EXPORT_FUNCTION(fx_napi_append_text_span)
+  V("initView", fx_native_init_view)
+  V("destroyView", fx_native_destroy_view)
+  V("getViewBounds", fx_native_get_view_bounds)
+  V("setViewBounds", fx_native_set_view_bounds)
 
-  NAPI_EXPORT_FUNCTION(fx_napi_web_view_init)
-  NAPI_EXPORT_FUNCTION(fx_napi_web_view_destroy)
-  NAPI_EXPORT_FUNCTION(fx_napi_get_web_view_bounds)
-  NAPI_EXPORT_FUNCTION(fx_napi_set_web_view_bounds)
-  NAPI_EXPORT_FUNCTION(fx_napi_web_view_post_message)
-  NAPI_EXPORT_FUNCTION(fx_napi_web_view_load_url)
-  NAPI_EXPORT_FUNCTION(fx_napi_web_view_load_html)
+  V("initText", fx_native_init_text)
+  V("destroyText", fx_native_destroy_text)
+  V("getTextBounds", fx_native_get_text_bounds)
+  V("getTextBoundsUsed", fx_native_get_text_bounds_used)
+  V("setTextBounds", fx_native_set_text_bounds)
+  V("initTextSpan", fx_native_init_text_span)
+  V("appendTextSpan", fx_native_append_text_span)
+
+  V("initWebView", fx_native_init_web_view)
+  V("destroyWebView", fx_native_destroy_web_view)
+  V("getWebViewBounds", fx_native_get_web_view_bounds)
+  V("setWebViewBounds", fx_native_set_web_view_bounds)
+  V("postWebViewMessage", fx_native_post_web_view_message)
+  V("loadWebViewUrl", fx_native_load_web_view_url)
+  V("loadWebViewHtml", fx_native_load_web_view_html)
+
+  return exports;
 }
+
+BARE_MODULE(fx_native, fx_native_exports)
