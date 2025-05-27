@@ -26,7 +26,9 @@ See [`example/`](example).
 
 > :warning: Only has an effect on the main thread.
 
-#### `app.terminate()`
+#### `app.destroy()`
+
+#### `app.dispatch(cb)`
 
 #### `app.broadcast(buffer)`
 
@@ -118,7 +120,7 @@ Extends [`Node`](#node).
 
 > :warning: Only available on the main thread.
 
-#### `const webView = new WebView(dataDirectory, x, y, width, height)`
+#### `const webView = new WebView(x, y, width, height)`
 
 #### `webView.ready`
 
@@ -131,8 +133,6 @@ Extends [`Node`](#node).
 #### `webView.loadURL(url)`
 
 #### `webView.loadHTML(html)`
-
-#### `webView.on('ready')`
 
 #### `webView.on('message', json)`
 
