@@ -6,6 +6,7 @@ if (app.isMain) {
   exports.Image = require('./lib/image')
   exports.Text = require('./lib/text')
   exports.View = require('./lib/view')
+  exports.Screen = require('./lib/screen')
   exports.WebView = require('./lib/web-view')
   exports.Window = require('./lib/window')
 }

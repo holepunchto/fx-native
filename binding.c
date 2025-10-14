@@ -5,6 +5,7 @@
 #include "lib/app.h"
 #include "lib/image.h"
 #include "lib/node.h"
+#include "lib/screen.h"
 #include "lib/text.h"
 #include "lib/view.h"
 #include "lib/web-view.h"
@@ -28,6 +29,9 @@ fx_native_exports(js_env_t *env, js_value_t *exports) {
   V("run", fx_native_run)
   V("isMain", fx_native_is_main)
   V("broadcast", fx_native_broadcast)
+
+  V("getMainScreen", fx_native_get_main_screen)
+  V("getScreenBounds", fx_native_get_screen_bounds)
 
   V("setChild", fx_native_set_child)
   V("unsetChild", fx_native_unset_child)

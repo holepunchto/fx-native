@@ -38,6 +38,14 @@ See [`example/`](example).
 
 #### `app.on('message', buffer)`
 
+### Screen
+
+> :warning: Only available on the main thread.
+
+#### `const screen = Screen.main()`
+
+#### `screen.getBounds()`
+
 ### Window
 
 > :warning: Only available on the main thread.
