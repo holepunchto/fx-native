@@ -65,8 +65,8 @@ fx_native_exports(js_env_t *env, js_value_t *exports) {
   V("getWebViewBounds", fx_native_get_web_view_bounds)
   V("setWebViewBounds", fx_native_set_web_view_bounds)
   V("postWebViewMessage", fx_native_post_web_view_message)
-  V("loadWebViewUrl", fx_native_load_web_view_url)
-  V("loadWebViewHtml", fx_native_load_web_view_html)
+  V("loadWebViewURL", fx_native_load_web_view_url)
+  V("loadWebViewHTML", fx_native_load_web_view_html)
 #undef V
 
   return exports;
