@@ -1,11 +1,11 @@
-cmake_minimum_required(VERSION 3.31)
+cmake_minimum_required(VERSION 4.0)
 
 find_package(cmake-bare REQUIRED PATHS node_modules/cmake-bare)
 find_package(cmake-fetch REQUIRED PATHS node_modules/cmake-fetch)
 
 project(fx_native C)
 
-fetch_package("github:holepunchto/libfx#f6e0540")
+fetch_package("github:holepunchto/libfx#2a3408e")
 
 add_bare_module(fx_native)
 
