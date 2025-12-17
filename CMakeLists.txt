@@ -5,7 +5,7 @@ find_package(cmake-fetch REQUIRED PATHS node_modules/cmake-fetch)
 
 project(fx_native C)
 
-fetch_package("github:holepunchto/libfx#2a3408e")
+fetch_package("github:holepunchto/libfx#463da54")
 
 add_bare_module(fx_native)
 
