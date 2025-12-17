@@ -17,9 +17,9 @@ static void
 fx_native__on_screen_finalize(js_env_t *env, void *data, void *finalize_hint) {
   int err;
 
-  fx_native_screen_t *screen = data;
+  fx_screen_t *screen = data;
 
-  err = fx_screen_release(screen->screen);
+  err = fx_screen_release(screen);
   assert(err == 0);
 }
 
@@ -48,7 +48,7 @@ fx_native_get_main_screen(js_env_t *env, js_callback_info_t *info) {
   err = fx_get_main_screen(app->app, &screen->screen);
   assert(err == 0);
 
-  err = js_add_finalizer(env, argv[1], screen, fx_native__on_screen_finalize, NULL, NULL);
+  err = js_add_finalizer(env, handle, screen->screen, fx_native__on_screen_finalize, NULL, NULL);
   assert(err == 0);
 
   return handle;
